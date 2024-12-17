@@ -17,7 +17,7 @@ class CatalogServiceApplicationKtTest {
     @Test
     fun `when get request with id then book returned`() {
         val bookIsbn = "1231231230"
-        val bookToCreate = Book.of(bookIsbn, "Title", "Author", 9.90)
+        val bookToCreate = Book.of(bookIsbn, "Title", "Author", "Pub_A", 9.90)
         val expectedBook: Book = webTestClient
             .post()
             .uri("/books")
@@ -43,7 +43,7 @@ class CatalogServiceApplicationKtTest {
 
     @Test
     fun `when post request then book created`() {
-        val expectedBook = Book.of("1231231231", "Title", "Author", 9.90)
+        val expectedBook = Book.of("1231231231", "Title", "Author", "Pub_A", 9.90)
 
         webTestClient
             .post()
@@ -61,7 +61,7 @@ class CatalogServiceApplicationKtTest {
     @Test
     fun `when put request then book updated`() {
         val bookIsbn = "1231231232"
-        val bookToCreate = Book.of(bookIsbn, "Title", "Author", 9.90)
+        val bookToCreate = Book.of(bookIsbn, "Title", "Author", "Pub_A", 9.90)
         val createdBook: Book = webTestClient
             .post()
             .uri("/books")
@@ -73,7 +73,8 @@ class CatalogServiceApplicationKtTest {
             .returnResult()
             .responseBody as Book
 
-        val bookToUpdate = Book.of(createdBook.isbn, createdBook.title, createdBook.author, 7.95)
+        val bookToUpdate =
+            Book.of(createdBook.isbn, createdBook.title, createdBook.author, "Pub_A", 7.95)
 
         webTestClient
             .put()
@@ -90,7 +91,7 @@ class CatalogServiceApplicationKtTest {
 
     @Test fun `when delete request then book deleted`() {
         val bookIsbn = "1231231233"
-        val bookToCreate = Book.of(bookIsbn, "Title", "Author", 9.90)
+        val bookToCreate = Book.of(bookIsbn, "Title", "Author", "Pub_A", 9.90)
 
         webTestClient
             .post()

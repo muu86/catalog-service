@@ -1,7 +1,6 @@
 package com.mj.catalog_service.domain
 
 import com.mj.catalog_service.config.DataConfig
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +22,7 @@ class BookRepositoryJdbcTest @Autowired constructor(
     @Test
     fun `find a book by isbn when existing`() {
         val bookIsbn = "1234561237"
-        val book = Book.of(bookIsbn, "Title", "Author", 12.90)
+        val book = Book.of(bookIsbn, "Title", "Author", "Pub_A", 12.90)
         jdbcAggregateTemplate.insert(book)
 
         val actualBook = bookRepository.findByIsbn(bookIsbn)

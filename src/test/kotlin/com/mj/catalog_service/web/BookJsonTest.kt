@@ -17,7 +17,7 @@ class BookJsonTest {
     @Test
     fun `test serialize`() {
         val now = Instant.now()
-        val book = Book(394L, "1234567890", "Title", "Author", 9.90, now, now, 21)
+        val book = Book(394L, "1234567890", "Title", "Author", "Pub_A", 9.90, now, now, 21)
         val jsonContent = json.write(book)
 
         assertThat(jsonContent).extractingJsonPathNumberValue("@.id")
@@ -45,12 +45,13 @@ class BookJsonTest {
                 "isbn": "1234567890",
                 "title": "Title",
                 "author": "Author",
+                "publisher": "Pub_A", 
                 "price": 9.90
             }
         """.trimIndent()
 
         assertThat(json.parse(content))
             .usingRecursiveComparison()
-            .isEqualTo(Book.of("1234567890", "Title", "Author", 9.90))
+            .isEqualTo(Book.of("1234567890", "Title", "Author", "Pub_A", 9.90))
     }
 }

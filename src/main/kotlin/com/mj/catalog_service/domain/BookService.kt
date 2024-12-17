@@ -29,6 +29,7 @@ class BookService(private val bookRepository: BookRepository)  {
                     existingBook.isbn,
                     book.title,
                     book.author,
+                    book.publisher,
                     book.price,
                     existingBook.createdDate,
                     existingBook.lastModifiedDate,
