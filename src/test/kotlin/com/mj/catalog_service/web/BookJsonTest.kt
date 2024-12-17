@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
 import org.springframework.boot.test.json.JacksonTester
+import java.time.Instant
 
 @JsonTest
 class BookJsonTest {
@@ -15,9 +16,12 @@ class BookJsonTest {
 
     @Test
     fun `test serialize`() {
-        val book = Book("1234567890", "Title", "Author", 9.90)
+        val now = Instant.now()
+        val book = Book(394L, "1234567890", "Title", "Author", 9.90, now, now, 21)
         val jsonContent = json.write(book)
 
+        assertThat(jsonContent).extractingJsonPathNumberValue("@.id")
+            .isEqualTo(book.id?.toInt())
         assertThat(jsonContent).extractingJsonPathStringValue("@.isbn")
             .isEqualTo(book.isbn)
         assertThat(jsonContent).extractingJsonPathStringValue("@.title")
@@ -26,6 +30,12 @@ class BookJsonTest {
             .isEqualTo(book.author)
         assertThat(jsonContent).extractingJsonPathNumberValue("@.price")
             .isEqualTo(book.price)
+        assertThat(jsonContent).extractingJsonPathStringValue("@.createdDate")
+            .isEqualTo(book.createdDate.toString())
+        assertThat(jsonContent).extractingJsonPathStringValue("@.lastModifiedDate")
+            .isEqualTo(book.lastModifiedDate.toString())
+        assertThat(jsonContent).extractingJsonPathNumberValue("@.version")
+            .isEqualTo(book.version)
     }
 
     @Test
@@ -41,6 +51,6 @@ class BookJsonTest {
 
         assertThat(json.parse(content))
             .usingRecursiveComparison()
-            .isEqualTo(Book("1234567890", "Title", "Author", 9.90))
+            .isEqualTo(Book.of("1234567890", "Title", "Author", 9.90))
     }
 }

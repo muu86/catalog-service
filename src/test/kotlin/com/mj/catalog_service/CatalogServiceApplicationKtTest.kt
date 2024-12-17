@@ -5,9 +5,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("integration")
 class CatalogServiceApplicationKtTest {
     @Autowired
     private lateinit var webTestClient: WebTestClient
@@ -15,7 +17,7 @@ class CatalogServiceApplicationKtTest {
     @Test
     fun `when get request with id then book returned`() {
         val bookIsbn = "1231231230"
-        val bookToCreate = Book(bookIsbn, "Title", "Author", 9.90)
+        val bookToCreate = Book.of(bookIsbn, "Title", "Author", 9.90)
         val expectedBook: Book = webTestClient
             .post()
             .uri("/books")
@@ -41,7 +43,7 @@ class CatalogServiceApplicationKtTest {
 
     @Test
     fun `when post request then book created`() {
-        val expectedBook = Book("1231231231", "Title", "Author", 9.90)
+        val expectedBook = Book.of("1231231231", "Title", "Author", 9.90)
 
         webTestClient
             .post()
@@ -59,7 +61,7 @@ class CatalogServiceApplicationKtTest {
     @Test
     fun `when put request then book updated`() {
         val bookIsbn = "1231231232"
-        val bookToCreate = Book(bookIsbn, "Title", "Author", 9.90)
+        val bookToCreate = Book.of(bookIsbn, "Title", "Author", 9.90)
         val createdBook: Book = webTestClient
             .post()
             .uri("/books")
@@ -71,7 +73,7 @@ class CatalogServiceApplicationKtTest {
             .returnResult()
             .responseBody as Book
 
-        val bookToUpdate = Book(createdBook.isbn, createdBook.title, createdBook.author, 7.95)
+        val bookToUpdate = Book.of(createdBook.isbn, createdBook.title, createdBook.author, 7.95)
 
         webTestClient
             .put()
@@ -86,10 +88,9 @@ class CatalogServiceApplicationKtTest {
             }
     }
 
-    @Test
-    fun `when delete request then book deleted`() {
+    @Test fun `when delete request then book deleted`() {
         val bookIsbn = "1231231233"
-        val bookToCreate = Book(bookIsbn, "Title", "Author", 9.90)
+        val bookToCreate = Book.of(bookIsbn, "Title", "Author", 9.90)
 
         webTestClient
             .post()
